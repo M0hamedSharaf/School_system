@@ -4,6 +4,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +17,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['middleware' => ['guest']] , function(){
     Route::get('loginPage',[AuthController::class,'loginPage'])->name('loginPage');
     Route::post('login',[AuthController::class,'login'])->name('login');
+});
+
+ 
+
+    Route::get('/admin', function () {
+        return redirect(route('loginPage'));
+    });
 
 
-
-
-
+ 
 Route::group(
-    [    'prefix' => 'dashboard',
-        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth' ]//
+    [    'prefix' => 'admin',
+        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth' ]
     ], function(){
 
         Route::get('/', function () {
@@ -45,9 +52,7 @@ Route::group(
         });
 
 
-        Route::get('/empty',function(){
-            return view('pages.empty');
-        });
+        
     });
 
 
